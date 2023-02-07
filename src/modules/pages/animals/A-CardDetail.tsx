@@ -75,7 +75,7 @@ export const AnimalCardDetail = () => {
               to={`/animal/${currentAnimalState.animal._id}/edit`}
               state={currentAnimalState.animal}
             >
-              <button>Edit</button>
+              <button >Edit</button>
             </Link>
           </div>
         </div>

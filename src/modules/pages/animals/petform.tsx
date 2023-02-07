@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 
 import { IAnimal } from "../../../model/IAnimal";
 import axios from "axios";
-
 
 type Tprops = {
   defaultValues: IAnimal;
@@ -27,22 +26,26 @@ export const PetForm = (props: Tprops) => {
     error: false,
   });
   const navigate = useNavigate();
+
   const onSubmit = (data: IAnimal) => {
     console.log(data);
-    const postAnimal = async () => {
+    const saveAnimal = async () => {
       setAnimalState({
         ...animalState,
         saving: true,
       });
       try {
-        const res = await axios.post(`http://localhost:3000/animal`, data);
+        const res = props.defaultValues._id
+          ? await axios.put(`http://localhost:3000/animal/:_id`, data)
+          : await axios.post(`http://localhost:3000/animal`, data);
+        const _id = res.data._id;
+        navigate(`/animal/${_id}`);
+
         setAnimalState({
           ...animalState,
 
           saving: false,
         });
-        const _id = res.data._id;
-        navigate(`/animal/${_id}`);
       } catch (error) {
         setAnimalState({
           ...animalState,
@@ -51,42 +54,20 @@ export const PetForm = (props: Tprops) => {
         });
       }
     };
-    const editAnimal = async () => {
-      setAnimalState({
-        ...animalState,
-        saving: true,
-      });
-      try {
-        const res = await axios.put(`http://localhost:3000/animal/:_id`, data);
-        setAnimalState({
-          ...animalState,
+    saveAnimal();
+  };
 
-          saving: false,
-        });
-        const _id = res.data._id;
-        navigate(`/animal/${_id}`);
-      } catch (error) {
-        setAnimalState({
-          ...animalState,
-          saving: false,
-          error: true,
-        });
-      }
-    };
-    const DeleteAnimal = async () => {
-      try {
-        await axios.delete(`http://localhost:3000/animal/:_id`);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    if (!props.defaultValues._id) {
-      postAnimal();
-    }
-    if (props.defaultValues._id) {
-      editAnimal();
-
-      navigate("/animal/:_id", { replace: true });
+  const DeleteAnimal = async () => {
+    //const params = useParams();
+    // const _id = params._id;
+    try {
+      const res = await axios.delete(
+        `http://localhost:3000/animal/${props.defaultValues._id}`
+      );
+      console.log(res);
+      navigate(`/animal`);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -195,17 +176,21 @@ export const PetForm = (props: Tprops) => {
           />
         </div>
         <button
+          className="formbutton"
           disabled={!isValid || animalState.saving}
           onClick={handleSubmit(onSubmit)}
         >
           {buttonText}
         </button>
-        {props.defaultValues._id ? (
-          <button onClick={() => {}}>Delete</button>
-        ) : (
-          <div></div>
-        )}
       </form>
+      <div className="button">
+        {" "}
+        {props.defaultValues.name && (
+          <button className="formbutton" onClick={DeleteAnimal}>
+            Delete
+          </button>
+        )}
+      </div>
     </div>
   );
 };

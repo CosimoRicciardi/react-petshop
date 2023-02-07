@@ -24,5 +24,5 @@ export const defaultPet: TdefaultPet = {
   birthDate: "",
   imgUrl: "",
   description: "",
-  pedigree: false ,
+  pedigree: false,
 };
