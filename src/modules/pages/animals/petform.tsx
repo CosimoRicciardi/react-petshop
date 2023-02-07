@@ -6,8 +6,6 @@ import dayjs from "dayjs";
 import { IAnimal } from "../../../model/IAnimal";
 import axios from "axios";
 
-import { json } from "react-router-dom";
-import { createModuleResolutionCache } from "typescript";
 
 type Tprops = {
   defaultValues: IAnimal;
