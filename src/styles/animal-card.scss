@@ -1,7 +1,15 @@
-.animal-card {
-
+.animals-list {
+  align-items: center;
+  background-color: #f4f4f4;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 1rem;
+  .animal-card {
     align-items: center;
-    max-width: 500px;
+    max-width: 700px;
     background-color: #b1afaf;
     padding: 1rem;
     //display: flex;
@@ -11,44 +19,49 @@
     border-radius: 1rem;
     align-items: center;
     display: flex;
-   
+    img {
+      max-width: 70px;
+    }
+  }
 }
+    .animal-details {
+      align-content: center;
+    
 
- .animals-list {
-         align-items: center;
-         background-color: #f4f4f4;
-         padding: 1rem;
-         display: flex;
-         flex-direction: column;
-         gap: 1rem;
-         margin-bottom: 2rem;
-         border-radius: 1rem;
-     }
-
-
-.animals {
-    color: rgb(155, 54, 54)f
+    img {
+      max-width: 250px;
+    }
+  
+  button {
+    background-color: #ffffff;
+    border-color: #b1afaf;
+    color: rgb(0, 0, 0);
+    border-radius: 0.5rem;
+    width: 70%;
+    height: 40px;
+    max-width: 700px;
+  }
 }
 
 .header {
-    width: 100%;
-    height: 60px;
-    border-bottom: 1px solid #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-   }
+  width: 100%;
+  height: 60px;
+  border-bottom: 1px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
 
 a {
-    color: black;
-    text-decoration: none;
+  color: black;
+  text-decoration: none;
 }
 
 h1 {
-    color: rgb(0, 0, 0);
-    display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 1rem;
+  color: rgb(0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }

@@ -1,9 +1,12 @@
 export interface IAnimal {
-  _id: number | null;
+  _id?: string;
   name: string;
-  type: "CAT" | "DOG" | "";
+  type: "CAT" | "DOG"| null;
   breed: string;
   birthDate: string;
+  imgUrl: string,
+  description: string,
+  pedigree: boolean,
 }
 
 export interface IAnimalExtended extends IAnimal {

@@ -10,12 +10,14 @@ export const AnimalCard = (props: Props) => {
 
   return (
     <div className="animal-card">
+      <div className="preview">
+        <img src={animal.imgUrl} alt="" />{" "}
+      </div>
       <b>Name: {animal.name}</b>
-      <p>Breed: {animal.breed}</p>
       <p>Type: {animal.type}</p>
-      <p>BirthDate: {animal.birthDate}</p>
+      
       <Link to={`/animal/${animal._id}`} state={animal}>
-        <b>Detail(only age for now)</b>
+        <button>Details</button>
       </Link>
     </div>
   );

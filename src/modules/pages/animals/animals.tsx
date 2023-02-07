@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 import { IAnimal } from "../../../model/IAnimal";
-import { AnimalCardDetail } from "./animal-detail";
+
 import { AnimalCard } from "./animalCard";
 
 type TAnimalState = {
@@ -23,7 +23,6 @@ export const Animals = () => {
       ...animalState,
       loading: true,
     });
-    
 
     try {
       const res = await axios.get(`http://localhost:3000/animal`);
@@ -44,6 +43,7 @@ export const Animals = () => {
 
   useEffect(() => {
     fetchAnimals();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -56,7 +56,7 @@ export const Animals = () => {
         {animalState.animals?.length === 0 && "No animals found"}
         {animalState.animals?.map((animal) => (
           <AnimalCard key={animal._id} animal={animal} />
-                 ))}
+        ))}
       </div>
     </div>
   );
