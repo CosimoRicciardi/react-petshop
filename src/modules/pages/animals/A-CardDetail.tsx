@@ -4,7 +4,7 @@ import { useParams, useLocation, Link } from "react-router-dom";
 import { IAnimal } from "../../../model/IAnimal";
 import { calcAge, ShowAge } from "../../../utils/shared-functions";
 
-type TCurrentAnimalState = {
+export type TCurrentAnimalState = {
   animal: IAnimal | null;
   loading: boolean;
   error: boolean;

@@ -13,6 +13,10 @@ type TPostAnimalState = {
   saving: boolean;
   error: boolean;
 };
+type TDeleteAnimalState = {
+  deleting: boolean;
+  error: boolean;
+};
 
 export const PetForm = (props: Tprops) => {
   const {
@@ -23,6 +27,10 @@ export const PetForm = (props: Tprops) => {
   } = useForm({ mode: "onChange", defaultValues: props.defaultValues });
   const [animalState, setAnimalState] = useState<TPostAnimalState>({
     saving: false,
+    error: false,
+  });
+  const [animalDelState, setAnimalDelState] = useState<TDeleteAnimalState>({
+    deleting: false,
     error: false,
   });
   const navigate = useNavigate();
@@ -38,14 +46,12 @@ export const PetForm = (props: Tprops) => {
         const res = props.defaultValues._id
           ? await axios.put(`http://localhost:3000/animal/:_id`, data)
           : await axios.post(`http://localhost:3000/animal`, data);
-        const _id = res.data._id;
-        navigate(`/animal/${_id}`);
-
         setAnimalState({
           ...animalState,
-
           saving: false,
         });
+        const _id = res.data._id;
+        navigate(`/animal/${_id}`);
       } catch (error) {
         setAnimalState({
           ...animalState,
@@ -58,17 +64,32 @@ export const PetForm = (props: Tprops) => {
   };
 
   const DeleteAnimal = async () => {
-    //const params = useParams();
-    // const _id = params._id;
+    setAnimalDelState({
+      ...animalState,
+      deleting: true,
+    });
     try {
       const res = await axios.delete(
         `http://localhost:3000/animal/${props.defaultValues._id}`
       );
+      setAnimalDelState({
+        ...animalState,
+        error: false,
+        deleting: false,
+      });
       console.log(res);
+      if (res.data === true) {
+      }
       navigate(`/animal`);
     } catch (error) {
+      setAnimalDelState({
+        ...animalState,
+        deleting: false,
+        error: true,
+      });
       console.log(error);
     }
+    DeleteAnimal();
   };
 
   const buttonText = props.defaultValues._id ? "Edit" : "Create the profile";
@@ -183,14 +204,20 @@ export const PetForm = (props: Tprops) => {
           {buttonText}
         </button>
       </form>
+
       <div className="button">
         {" "}
         {props.defaultValues.name && (
-          <button className="formbutton" onClick={DeleteAnimal}>
+          <button
+            className="formbutton"
+            onClick={DeleteAnimal}
+            disabled={animalDelState.deleting}
+          >
             Delete
           </button>
         )}
       </div>
+      {animalDelState.error && "Error deleting animal"}
     </div>
   );
 };
