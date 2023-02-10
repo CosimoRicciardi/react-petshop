@@ -17,6 +17,9 @@ export const EditPet = () => {
       animal,
       loading: false,
       error: false,
+      saving:false,
+      deleting:false,
+      buttonclicked: false,
     });
 
   const fetchAnimalById = async () => {

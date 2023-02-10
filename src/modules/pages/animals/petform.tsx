@@ -2,21 +2,14 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-
+import { TCurrentAnimalState } from "./A-CardDetail";
 import { IAnimal } from "../../../model/IAnimal";
 import axios from "axios";
 
 type Tprops = {
   defaultValues: IAnimal;
 };
-type TPostAnimalState = {
-  saving: boolean;
-  error: boolean;
-};
-type TDeleteAnimalState = {
-  deleting: boolean;
-  error: boolean;
-};
+
 
 export const PetForm = (props: Tprops) => {
   const {
@@ -25,19 +18,21 @@ export const PetForm = (props: Tprops) => {
     watch,
     formState: { isValid, errors },
   } = useForm({ mode: "onChange", defaultValues: props.defaultValues });
-  const [animalState, setAnimalState] = useState<TPostAnimalState>({
+  const [animalState, setAnimalState] = useState<TCurrentAnimalState>({
+    animal: props.defaultValues,
     saving: false,
     error: false,
+    deleting:false,
+    loading: false,
+    buttonclicked: false,
+    
+
   });
-  const [animalDelState, setAnimalDelState] = useState<TDeleteAnimalState>({
-    deleting: false,
-    error: false,
-  });
+  
   const navigate = useNavigate();
 
-  const onSubmit = (data: IAnimal) => {
-    console.log(data);
-    const saveAnimal = async () => {
+  
+    const saveAnimal = async (data:IAnimal) => {
       setAnimalState({
         ...animalState,
         saving: true,
@@ -59,38 +54,10 @@ export const PetForm = (props: Tprops) => {
           error: true,
         });
       }
-    };
-    saveAnimal();
+    
   };
 
-  const DeleteAnimal = async () => {
-    setAnimalDelState({
-      ...animalState,
-      deleting: true,
-    });
-    try {
-      const res = await axios.delete(
-        `http://localhost:3000/animal/${props.defaultValues._id}`
-      );
-      setAnimalDelState({
-        ...animalState,
-        error: false,
-        deleting: false,
-      });
-      console.log(res);
-      if (res.data === true) {
-      }
-      navigate(`/animal`);
-    } catch (error) {
-      setAnimalDelState({
-        ...animalState,
-        deleting: false,
-        error: true,
-      });
-      console.log(error);
-    }
-    DeleteAnimal();
-  };
+  
 
   const buttonText = props.defaultValues._id ? "Edit" : "Create the profile";
   const now = dayjs().format("YYYY-MM-DD");
@@ -102,7 +69,7 @@ export const PetForm = (props: Tprops) => {
       <form>
         {" "}
         <div className="row">
-          <label htmlFor="name"> Insert your pet's name: </label>
+          <label htmlFor="name" id="name"> Insert your pet's name: </label>
           <input
             {...register("name", {
               required: { value: true, message: " Please enter the name" },
@@ -113,7 +80,7 @@ export const PetForm = (props: Tprops) => {
           {errors.name?.message}
         </div>
         <div className="row">
-          <label htmlFor="type"> Cat or Dog? </label>
+          <label htmlFor="type" id="type"> Cat or Dog? </label>
           <select {...register("type", { required: true })}>
             <option value="CAT">Cat</option>
             <option value="DOG">Dog</option>
@@ -121,7 +88,7 @@ export const PetForm = (props: Tprops) => {
         </div>
         {watchType && (
           <div className="row">
-            <label htmlFor="breed"> Breed: </label>
+            <label htmlFor="breed" id="breed"> Breed: </label>
             <select
               {...register("breed", {
                 required: { value: true, message: "Field required" },
@@ -144,7 +111,7 @@ export const PetForm = (props: Tprops) => {
           </div>
         )}
         <div className="row">
-          <label htmlFor="birthDate">Insert the birthdate: </label>
+          <label htmlFor="birthDate" id="birthDate">Insert the birthdate: </label>
           <input
             id="birthDate"
             type="date"
@@ -157,7 +124,7 @@ export const PetForm = (props: Tprops) => {
           {errors.birthDate && errors.birthDate.message}
         </div>
         <div className="row">
-          <label htmlFor="description"> Insert your pet's description: </label>
+          <label htmlFor="description" id="description"> Insert your pet's description: </label>
           <input
             {...register("description", {
               required: {
@@ -171,7 +138,7 @@ export const PetForm = (props: Tprops) => {
           {errors.description?.message}
         </div>
         <div className="row">
-          <label htmlFor="image">Insert image url:</label>
+          <label htmlFor="image" id="image">Insert image url:</label>
           <input
             id="image"
             {...register("imgUrl", {
@@ -187,7 +154,7 @@ export const PetForm = (props: Tprops) => {
           )}
         </div>
         <div className="row">
-          <label htmlFor="pedigree">Does he have a pedigree?</label>
+          <label htmlFor="pedigree" id="pedigree">Does he have a pedigree?</label>
           <input
             id="pedigree"
             type="checkbox"
@@ -199,25 +166,13 @@ export const PetForm = (props: Tprops) => {
         <button
           className="formbutton"
           disabled={!isValid || animalState.saving}
-          onClick={handleSubmit(onSubmit)}
+          onClick={handleSubmit(saveAnimal)}
         >
           {buttonText}
         </button>
       </form>
 
-      <div className="button">
-        {" "}
-        {props.defaultValues.name && (
-          <button
-            className="formbutton"
-            onClick={DeleteAnimal}
-            disabled={animalDelState.deleting}
-          >
-            Delete
-          </button>
-        )}
-      </div>
-      {animalDelState.error && "Error deleting animal"}
+      
     </div>
   );
 };
