@@ -1,11 +1,11 @@
- export const calcAge = (birthdate:string) => {
+ export const calcAge = (birthdate:string) :number =>  {
         const yearOfBirth = new Date(birthdate).getFullYear();
         const currentYear = new Date().getFullYear();
         return currentYear - yearOfBirth;
  }
 
 
- export const ShowAge=(age:number)=>{
+ export const ShowAge=(age:number) :string =>{
 
 
 switch (age)
@@ -15,3 +15,4 @@ default: return ` He is ${age} years old`;}
 
 
  }
+
