@@ -21,7 +21,6 @@ export const AnimalCardDetail = () => {
   const animal: IAnimal = location.state;
   const navigate = useNavigate();
 
-
   const [currentAnimalState, setCurrentAnimalState] =
     useState<TCurrentAnimalState>({
       animal,
@@ -66,7 +65,7 @@ export const AnimalCardDetail = () => {
         error: false,
         deleting: false,
       });
-    
+
       if (res.data === true) {
       }
       navigate(`/animal`);
@@ -97,7 +96,6 @@ export const AnimalCardDetail = () => {
       {currentAnimalState.loading && "Loading"}
       {currentAnimalState.error && "Error loading "}
       {currentAnimalState.animal && (
-      
         <div className="animal-details">
           <div className="preview">
             <img src={currentAnimalState.animal.imgUrl} alt="" />{" "}
@@ -126,19 +124,18 @@ export const AnimalCardDetail = () => {
             >
               Delete
             </button>
-          </div>
-          {currentAnimalState.error && "Error deleting animal"}
-          {currentAnimalState.buttonclicked && (
-            <div>
-           
-              Are you sure you want to delete?
+            {currentAnimalState.error && "Error deleting animal"}
+            {currentAnimalState.buttonclicked && (
               <div>
-                <button onClick={deleteAnimal}>Yes</button>
-             
-                <button onClick={confirmFunction}>No</button>
+                Are you sure you want to delete?
+                <div>
+                  <button onClick={deleteAnimal}>Yes</button>
+
+                  <button onClick={confirmFunction}>No</button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
     </div>
