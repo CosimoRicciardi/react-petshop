@@ -102,7 +102,6 @@ export const AnimalCardDetail = () => {
           <div className="preview">
             <img src={currentAnimalState.animal.imgUrl} alt="" />{" "}
           </div>
-          <br></br>
           <b>Name: {currentAnimalState.animal.name}</b>
           <p>Id: {currentAnimalState.animal._id}</p>
           <p>Breed: {currentAnimalState.animal.breed}</p>
@@ -131,11 +130,11 @@ export const AnimalCardDetail = () => {
           {currentAnimalState.error && "Error deleting animal"}
           {currentAnimalState.buttonclicked && (
             <div>
-              <br></br>
+           
               Are you sure you want to delete?
               <div>
                 <button onClick={deleteAnimal}>Yes</button>
-                <br></br>
+             
                 <button onClick={confirmFunction}>No</button>
               </div>
             </div>
