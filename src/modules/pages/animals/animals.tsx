@@ -1,7 +1,6 @@
 import axios from "axios";
+import React from "react";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 
 import { IAnimal } from "../../../model/IAnimal";
 
@@ -19,6 +18,8 @@ export const Animals = () => {
     error: false,
     animals: null,
   });
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filteredAnimals, setFilteredAnimals] = useState<IAnimal[] | null>([]);
 
   const fetchAnimals = async () => {
     setAnimalsState({
@@ -49,26 +50,21 @@ export const Animals = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { register, watch } = useForm({
-    mode: "onChange",
-    defaultValues: undefined,
-  });
+  const handleSearch = (event: any) => {
+    const searchTerm = event.target.value.toLowerCase();
 
-  /*La funzionalità di search è ancora molto primordiale, restituisce solo il primo animale trovato per nome, non tenendo conto di eventuali omonimi.
-  Cercherò di modificarla in maniera tale che, scrivendo una query nella searchbox, animal list viene ri-renderizzata solo con le card che contengono 
-  la query nel nome */
-  
-  const watchBar = watch("searchbox");
+    setSearchTerm(searchTerm);
 
-  const petFound = animalsState.animals?.find((pet) => {
-    return pet.name.toLowerCase() === watchBar.toLowerCase();
-  });
+    if (searchTerm.length >= 2) {
+      const filteredAnimals = animalsState.animals?.filter((animal) =>
+        animal.name.toLowerCase().includes(searchTerm)
+      );
 
-  const navigate = useNavigate();
-
-  const search = (event: any) => {
-    if (event.keyCode === 13 || event.type === "click") {
-      navigate(`/animal/${petFound?._id} `);
+      if (filteredAnimals) {
+        setFilteredAnimals(filteredAnimals);
+      }
+    } else {
+      setFilteredAnimals([]);
     }
   };
 
@@ -77,16 +73,27 @@ export const Animals = () => {
       <h1>Animals</h1>
       <label htmlFor="search" id="search">
         Search for your pet:
-        <br></br>
       </label>
-      <input
-        type="searchbox"
-        {...register("searchbox", {})}
-        placeholder="Pet's name"
-        onKeyDown={search}
-      ></input>
-      <button className="searchbutton"onClick={search} disabled={!petFound}>Search</button>
-      {!petFound && watchBar?.length > 0 && " No pet found"}
+      <div>
+        <input
+          type="searchbox"
+          placeholder="Type the pet's name"
+          onChange={handleSearch}
+        />
+
+        {filteredAnimals?.length !== 0 && (
+          <div className="animals-list">
+            Pet(s) found:
+            {filteredAnimals?.map((animal) => (
+              <AnimalCard key={animal._id} animal={animal} />
+            ))}
+          </div>
+        )}
+        {filteredAnimals?.length === 0 && searchTerm.length > 2 && (
+          <p className="not-found">No animals found</p>
+        )}
+      </div>
+
       <div className="animals-list">
         {animalsState.loading && "Loading"}
         {animalsState.error && "Error"}
